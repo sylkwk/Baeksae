@@ -8,82 +8,87 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/metal_panel"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/back_button"
+            <ImageButton
+                android:id="@+id/button_back"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:backgroundTint="#FB0505"
-                android:text="뒤로"
-                android:textSize="25dp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/next_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#0DF116"
-                android:text="읽기"
-                android:textColor="@color/black"
-                android:textSize="25dp"
-                android:textStyle="bold" />
+                android:rotation="180"
+                app:srcCompat="@drawable/ic_baseline_backward_50" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/read_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#052EFB"
-                android:text="다음"
-                android:textSize="25dp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/summary_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#F8BB03"
-                android:text="요약"
-                android:textColor="@color/black"
-                android:textSize="25dp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="20dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/button5"
+            <ImageButton
+                android:id="@+id/button_summary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#F8BB03"
+                app:srcCompat="@drawable/ic_baseline_summarize_24" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/button_stt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:backgroundTint="#FFFFFF"
-                android:text="음성\n인식"
-                android:textColor="@color/black"
-                android:textSize="25dp"
-                android:textStyle="bold" />
+                app:srcCompat="@drawable/ic_baseline_mic_50" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/button_read"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#0FA115"
+                app:srcCompat="@drawable/ic_baseline_campaign_50"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/button_next"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#052EFB"
+                app:srcCompat="@drawable/ic_baseline_forward_50"/>
+
         </LinearLayout>
     </LinearLayout>
 

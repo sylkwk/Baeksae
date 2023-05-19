@@ -7,6 +7,7 @@ package com.cookandroid.baeksae;
         import android.content.Intent;
         import android.view.View;
         import android.widget.Button;
+        import android.widget.ImageButton;
 
 public class NewsCategoryActivity extends AppCompatActivity {
 
@@ -35,7 +36,7 @@ public class NewsCategoryActivity extends AppCompatActivity {
             }
         });
 
-        Button backButton = findViewById(R.id.back_button);
+        ImageButton backButton = findViewById(R.id.button_back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
