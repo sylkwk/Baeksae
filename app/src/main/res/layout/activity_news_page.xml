@@ -54,7 +54,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="이번 여름 역대급 폭염 예상"
+                        android:text="'5월인데 벌써 30도' 때이른 폭염에 여름 공포"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="25dp"
@@ -70,6 +70,7 @@
                     android:background="@color/white" /> <!-- 기사 이미지 삽입 -->
 
 
+
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -77,11 +78,11 @@
                     app:cardCornerRadius="15dp">
 
                     <TextView
-                        android:id="@+id/textView_ArticleText"
+                        android:id="@+id/textView_Article"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="이번 여름 역대급 폭염 예상됩니다."
+                        android:text="전국 대부분 지역에서 낮 최고기온이 30도 이상으로 오르는 등 때 이른 한여름 더위가 찾아오면서 올여름 폭염을 우려하는 목소리가 커지고 있다. 8년 만에 찾아온 슈퍼 엘니뇨의 영향으로 역대급 무더위가 찾아올 수 있다는 우려다. 기상청에 따르면 이날 따뜻한 남서풍이 유입되면서 내륙과 동해안을 중심으로 낮 최고 기온이 30℃ 이상 올랐다. 기상청은 폭염특보 발령 기준을 '일 최고 체감 온도가 33도인 상태가 2일 이상 지속될 때'로 두고 있는데, 체감온도는 기온에 습도·바람을 반영해 산출한다. 같은 기온이어도 습도가 높으면 체감온도도 정비례한다. 기상청은 이날 찾아온 이른 더위의 원인을 일본 남쪽 해상에 위치한 고기압에 따른 따뜻한 남서풍의 유입 때문으로 보고 있다. 오는 18일부터 기온이 평년 수준으로 꺾일 것으로 예보됐지만, 5월 중순 찾아온 때 이른 무더위에 벌써 올여름 폭염을 걱정하는 시민들이 많다. 지난해 서울 낮 기온이 처음으로 30도 넘어선 것은 5월 23일(30.7도)이었다. 일주일 정도 빨리 여름 더위가 찾아온 것이다."
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="20dp"

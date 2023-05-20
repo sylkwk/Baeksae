@@ -16,7 +16,25 @@ public class NewsCategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_category);
 
-        CardView cardView2 = findViewById(R.id.button_toEntertainmentNews);
+        ImageButton backButton = findViewById(R.id.button_back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        CardView cardView1 = findViewById(R.id.button_toEconomyNews);
+        cardView1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // NewsPageActivity로 이동
+                Intent intent = new Intent(NewsCategoryActivity.this, NewsPageActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        CardView cardView2 = findViewById(R.id.button_toPoliticNews);
         cardView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -26,22 +44,25 @@ public class NewsCategoryActivity extends AppCompatActivity {
             }
         });
 
-        CardView cardView1 = findViewById(R.id.button_toEconomyNews);
-        cardView1.setOnClickListener(new View.OnClickListener() {
+        CardView cardView3 = findViewById(R.id.button_toInternationalNews);
+        cardView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // AiSearchActivity로 이동
+                // NewsPageActivity로 이동
                 Intent intent = new Intent(NewsCategoryActivity.this, NewsPageActivity.class);
                 startActivity(intent);
             }
         });
 
-        ImageButton backButton = findViewById(R.id.button_back);
-        backButton.setOnClickListener(new View.OnClickListener() {
+        CardView cardView4 = findViewById(R.id.button_toEntertainmentNews);
+        cardView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                // NewsPageActivity로 이동
+                Intent intent = new Intent(NewsCategoryActivity.this, NewsPageActivity.class);
+                startActivity(intent);
             }
         });
+
     }
 }
