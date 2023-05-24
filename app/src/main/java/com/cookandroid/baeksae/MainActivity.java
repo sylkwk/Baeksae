@@ -15,8 +15,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CardView cardView2 = findViewById(R.id.button_toNewsCategory);
-        cardView2.setOnClickListener(new View.OnClickListener() {
+        CardView cardView1 = findViewById(R.id.button_toNewsCategory);
+        cardView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // NewCategoryAcivity로 이동
@@ -25,12 +25,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        CardView cardView1 = findViewById(R.id.button_toAiSearch);
-        cardView1.setOnClickListener(new View.OnClickListener() {
+        CardView cardView2 = findViewById(R.id.button_toAiSearch);
+        cardView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // AiSearchActivity로 이동
                 Intent intent = new Intent(MainActivity.this, AiSearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        CardView cardView3 = findViewById(R.id.button_toEasyAi);
+        cardView3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // AiSearchActivity로 이동
+                Intent intent = new Intent(MainActivity.this, EasyAiCategoryActivity.class);
                 startActivity(intent);
             }
         });

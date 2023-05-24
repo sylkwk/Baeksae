@@ -1,13 +1,13 @@
 package com.cookandroid.baeksae;
 
-        import androidx.appcompat.app.AppCompatActivity;
-        import androidx.cardview.widget.CardView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
-        import android.os.Bundle;
-        import android.content.Intent;
-        import android.view.View;
-        import android.widget.Button;
-        import android.widget.ImageButton;
+import android.os.Bundle;
+import android.content.Intent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 public class NewsCategoryActivity extends AppCompatActivity {
 
@@ -58,11 +58,14 @@ public class NewsCategoryActivity extends AppCompatActivity {
         cardView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // NewsPageActivity로 이동
-                Intent intent = new Intent(NewsCategoryActivity.this, NewsPageActivity.class);
+                // TestActivity로 이동
+                Intent intent = new Intent(NewsCategoryActivity.this, TestActivity.class);
                 startActivity(intent);
             }
         });
 
     }
 }
+
+
+

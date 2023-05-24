@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Baeksae</string>
+    <string name="app_name">백세AI대</string>
+    <string name="news_api_key">001f39ffc4a04b3ab713cd153b46ccf7</string>
 </resources>
