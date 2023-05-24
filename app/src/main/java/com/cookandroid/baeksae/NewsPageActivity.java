@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.Locale;
 
 public class NewsPageActivity extends AppCompatActivity {
-    private TextToSpeech mTTS;
+    private TextToSpeechHelper mTTSHelper;
     private TextView mTextView;
     private ImageButton mButtonToggleTTS;
 
@@ -20,6 +20,8 @@ public class NewsPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_page);
+
+        mTTSHelper = new TextToSpeechHelper(this);
 
         ImageButton backButton = findViewById(R.id.button_back);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -37,52 +39,38 @@ public class NewsPageActivity extends AppCompatActivity {
             }
         });
 
-        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    int result = mTTS.setLanguage(Locale.KOREAN);
-
-                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Log.e("TTS", "언어가 지원되지 않습니다");
-                    } else {
-                        mButtonToggleTTS.setEnabled(true);
-                    }
-                } else {
-                    Log.e("TTS", "초기화에 실패했습니다");
-                }
-            }
-        });
-
         mTextView = findViewById(R.id.textView_Article);
     }
 
     private void toggleTTS() {
-        if (mTTS.isSpeaking()) {
-            stopTTS();
-        } else {
-            startTTS();
+        if (mTTSHelper != null) {
+            if (mTTSHelper.isSpeaking()) {
+                stopTTS();
+            } else {
+                startTTS();
+            }
         }
     }
 
     private void startTTS() {
         String text = mTextView.getText().toString();
-
-        mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null, "utteranceId");
+        mTTSHelper.speak(text);
     }
 
     private void stopTTS() {
-        mTTS.stop();
+        mTTSHelper.stop();
     }
 
     @Override
     protected void onDestroy() {
         stopTTS();
 
-        if (mTTS != null) {
-            mTTS.shutdown();
+        if (mTTSHelper != null) {
+            mTTSHelper.shutdown();
         }
 
         super.onDestroy();
     }
 }
+
+//News API : 001f39ffc4a04b3ab713cd153b46ccf7
