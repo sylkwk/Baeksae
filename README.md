@@ -1,14 +1,16 @@
 # Baeksae
 AI search tool for senior digital divide
 
-<To-Do>
+ <To-Do>
+ 
+ -OpenAI API 연결
   
-  -OpenAI API 연결
-  -OpenAI API 사용해서 TextSumerizer 만들기
-  -STT 기능 구현
+ -OpenAI API 사용해서 TextSumerizer 만들기
+  
+ -STT 기능 구현
   
 
-역할 분담 
+<역할 분담>
   
 진후 : OpenAI API 연동, STT 기능
   
