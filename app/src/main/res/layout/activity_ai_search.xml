@@ -24,6 +24,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/include2"
@@ -53,7 +54,7 @@
     </ScrollView>
 
     <FrameLayout
-            android:id="@+id/processing_screen_layout"
+            android:id="@+id/processing_summary"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@drawable/processing_screen"
@@ -67,7 +68,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView_STT"
+                    android:id="@+id/textView_processing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="처리중..."
@@ -81,8 +82,49 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.5" />
 
+                <ProgressBar
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintEnd_toEndOf="@+id/textView_processing"
+                    app:layout_constraintStart_toStartOf="@+id/textView_processing"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_processing"
+                    android:indeterminateTint="@color/white"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </FrameLayout>
+
+<!--    <FrameLayout
+        android:id="@+id/processing_STT"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/processing_screen"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/include2"
+        app:layout_constraintTop_toTopOf="@+id/include">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView_STT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="40dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
