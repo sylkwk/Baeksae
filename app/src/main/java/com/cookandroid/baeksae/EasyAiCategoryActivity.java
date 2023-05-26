@@ -22,6 +22,7 @@ public class EasyAiCategoryActivity extends AppCompatActivity {
                 finish();
             }
         });
+        //뒤로가기 (EasyAiCategoryActivity->MainActivity)
 
         CardView cardView1 = findViewById(R.id.button_toEasyDoctorActivity);
         cardView1.setOnClickListener(new View.OnClickListener() {

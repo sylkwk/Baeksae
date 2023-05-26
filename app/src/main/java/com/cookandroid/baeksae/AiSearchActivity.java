@@ -23,6 +23,7 @@ public class AiSearchActivity extends AppCompatActivity {
                 finish();
             }
         });
+        //뒤로가기 (AiSearchActivity->MainActivity)
 
         processingScreen = findViewById(R.id.processing_summary);
         processingScreen.setVisibility(View.GONE); // processing_summary 초기 상태를 숨김으로 설정

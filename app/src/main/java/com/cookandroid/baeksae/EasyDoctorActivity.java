@@ -20,5 +20,7 @@ public class EasyDoctorActivity extends AppCompatActivity {
                 finish();
             }
         });
+        //뒤로가기 (EasyDoctorActivity->EasyAiCategoryActivity)
+
     }
 }
