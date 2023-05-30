@@ -1,115 +1,65 @@
 package com.cookandroid.baeksae;
 
-import android.content.Context;
+import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.os.Bundle;
-import android.speech.RecognitionListener;
+import android.content.pm.PackageManager;
 import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
-import android.util.Log;
-
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class SpeechToTextHelper {
-    private Context mContext;
-    private SpeechRecognizer mSpeechRecognizer;
-    private boolean mIsListening;
-    private SpeechToTextListener mListener;
+    private static final int REQUEST_CODE_SPEECH_INPUT = 100;
+    private TextView textViewResponse;
+    private ImageButton buttonSTT;
+    private AppCompatActivity activity;
 
-    public SpeechToTextHelper(Context context, SpeechToTextListener listener) {
-        mContext = context;
-        mListener = listener;
-        mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
-        mSpeechRecognizer.setRecognitionListener(new SpeechRecognitionListener());
+    public SpeechToTextHelper(AppCompatActivity activity, TextView textView) {
+        this.activity = activity;
+        this.textViewResponse = textView;
     }
 
-    public void startListening() {
-        if (!mIsListening) {
+    public void initializeViews(ImageButton buttonSTT) {
+        this.buttonSTT = buttonSTT;
+        this.buttonSTT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startSpeechToText();
+            }
+        });
+    }
+
+    private void startSpeechToText() {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECORD_AUDIO},
+                    REQUEST_CODE_SPEECH_INPUT);
+        } else {
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "말씀해주세요...");
 
-            mSpeechRecognizer.startListening(intent);
-            mIsListening = true;
-        }
-    }
-
-    public void stopListening() {
-        if (mIsListening) {
-            mSpeechRecognizer.stopListening();
-            mIsListening = false;
-        }
-    }
-
-    public boolean isListening() {
-        return mIsListening;
-    }
-
-    public void destroy() {
-        if (mSpeechRecognizer != null) {
-            mSpeechRecognizer.destroy();
-        }
-    }
-
-    private class SpeechRecognitionListener implements RecognitionListener {
-        @Override
-        public void onReadyForSpeech(Bundle params) {
-            Log.d("STT", "onReadyForSpeech");
-        }
-
-        @Override
-        public void onBeginningOfSpeech() {
-            Log.d("STT", "onBeginningOfSpeech");
-        }
-
-        @Override
-        public void onRmsChanged(float rmsdB) {
-            Log.d("STT", "onRmsChanged: " + rmsdB);
-        }
-
-        @Override
-        public void onBufferReceived(byte[] buffer) {
-            Log.d("STT", "onBufferReceived");
-        }
-
-        @Override
-        public void onEndOfSpeech() {
-            Log.d("STT", "onEndOfSpeech");
-        }
-
-        @Override
-        public void onError(int error) {
-            Log.e("STT", "onError: " + error);
-            mListener.onSpeechToTextError(error);
-            mIsListening = false;
-        }
-
-        @Override
-        public void onResults(Bundle results) {
-            Log.d("STT", "onResults");
-            ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-            if (matches != null && !matches.isEmpty()) {
-                String text = matches.get(0);
-                mListener.onSpeechToTextResult(text);
+            try {
+                activity.startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(activity, "음성 인식이 지원되지 않는 기기입니다.", Toast.LENGTH_SHORT).show();
             }
-            mIsListening = false;
-        }
-
-        @Override
-        public void onPartialResults(Bundle partialResults) {
-            Log.d("STT", "onPartialResults");
-        }
-
-        @Override
-        public void onEvent(int eventType, Bundle params) {
-            Log.d("STT", "onEvent");
         }
     }
 
-    public interface SpeechToTextListener {
-        void onSpeechToTextResult(String result);
-
-        void onSpeechToTextError(int errorCode);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String recognizedText = result.get(0);
+            textViewResponse.setText(recognizedText);
+        }
     }
 }

@@ -20,4 +20,10 @@
         android:text="음성 인식 응답"
         android:textSize="18sp" />
 
+    <include
+        android:id="@+id/include2"
+        layout="@layout/button_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>

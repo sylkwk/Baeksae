@@ -53,6 +53,7 @@ public class NewsCategoryActivity extends AppCompatActivity {
             }
         });
 
+/*
         CardView cardView4 = findViewById(R.id.button_toEntertainmentNews);
         cardView4.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +63,7 @@ public class NewsCategoryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+*/
 
     }
 }

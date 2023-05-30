@@ -1,16 +1,28 @@
+/*
 package com.cookandroid.baeksae;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.Manifest;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class TestActivity extends AppCompatActivity implements SpeechToTextHelper.SpeechToTextListener {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
+public class TestActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_SPEECH_INPUT = 100;
     private TextView textViewResponse;
-    private Button buttonRequest;
-    private SpeechToTextHelper speechToTextHelper;
+    private ImageButton buttonSTT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,42 +30,47 @@ public class TestActivity extends AppCompatActivity implements SpeechToTextHelpe
         setContentView(R.layout.activity_test);
 
         textViewResponse = findViewById(R.id.textView_response);
-        buttonRequest = findViewById(R.id.button_request);
+        buttonSTT = findViewById(R.id.button_stt);
 
-        // SpeechToTextHelper 인스턴스를 생성합니다.
-        speechToTextHelper = new SpeechToTextHelper(this, this);
-
-        // 요청 버튼에 클릭 리스너를 설정합니다.
-        buttonRequest.setOnClickListener(new View.OnClickListener() {
+        buttonSTT.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                // 음성 입력을 위해 듣기 시작합니다.
-                speechToTextHelper.startListening();
+            public void onClick(View v) {
+                startSpeechToText();
             }
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    private void startSpeechToText() {
+        // Check if the required permissions are granted
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+                    REQUEST_CODE_SPEECH_INPUT);
+        } else {
+            // Start speech recognition
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault()); // Use default locale (Korean in this case)
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "말씀해주세요..."); // Prompt message in Korean
 
-        // SpeechToTextHelper 인스턴스를 정리합니다.
-        speechToTextHelper.destroy();
+            try {
+                startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, "음성 인식이 지원되지 않는 기기입니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
-    public void onSpeechToTextResult(String result) {
-        // TextView에 음성 인식 결과를 표시합니다.
-        textViewResponse.setText(result);
-    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-    @Override
-    public void onSpeechToTextError(int errorCode) {
-        // 음성 인식 중에 발생하는 오류를 처리합니다.
-        // 예를 들어, 사용자에게 오류 메시지를 표시할 수 있습니다.
-        textViewResponse.setText("음성 인식 오류: " + errorCode);
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK && data != null) {
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String recognizedText = result.get(0);
+            textViewResponse.setText(recognizedText);
+        }
     }
 }
-
-
+*/
 
