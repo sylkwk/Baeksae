@@ -1,4 +1,4 @@
-package com.cookandroid.baeksae;
+/*package com.cookandroid.baeksae;
 
 import org.json.JSONArray;
 
@@ -11,8 +11,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class OpenAiApiClient {
-
-    private static final String API_KEY = "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";
     private static final String BASE_URL = "https://api.openai.com/v1";
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
@@ -45,7 +43,7 @@ public class OpenAiApiClient {
         return response.body().string();
     }
 
-}
+}*/
 
 
 

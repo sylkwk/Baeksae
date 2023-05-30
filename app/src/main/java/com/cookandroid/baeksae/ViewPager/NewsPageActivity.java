@@ -1,4 +1,4 @@
-package com.cookandroid.baeksae;
+package com.cookandroid.baeksae.ViewPager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.cookandroid.baeksae.R;
+import com.cookandroid.baeksae.TextToSpeechHelper;
 
 import java.util.Locale;
 

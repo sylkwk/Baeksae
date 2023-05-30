@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E4E2CF"
-    tools:context=".NewsPageActivity">
+    tools:context=".ViewPager.NewsPageActivity">
 
     <include
         android:id="@+id/titlebar_include"

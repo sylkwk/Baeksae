@@ -170,13 +170,46 @@
 
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/button19"
+            android:id="@+id/button_toChatbot"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_margin="20dp"
             android:layout_row="1"
             android:layout_column="1"
             app:cardCornerRadius="15dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <ImageView
+                    android:id="@+id/imageView_Chatbot"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintBottom_toTopOf="@+id/textView_Chatbot"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_baseline_chat_100" />
+
+                <TextView
+                    android:id="@+id/textView_Chatbot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="챗봇"
+                    android:textAlignment="center"
+                    android:textColor="#6B5434"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </androidx.cardview.widget.CardView>
     </GridLayout>

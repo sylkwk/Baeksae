@@ -46,6 +46,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        CardView cardView4 = findViewById(R.id.button_toChatbot);
+        cardView4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // ChatbotActivity로 이동
+                Intent intent = new Intent(MainActivity.this, ChatbotActivity.class);
+                startActivity(intent);
+            }
+        });
+
         ImageView buttonSetting = findViewById(R.id.button_setting);
         buttonSetting.setOnClickListener(new View.OnClickListener() {
             @Override
