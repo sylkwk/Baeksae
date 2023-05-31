@@ -36,7 +36,7 @@ public class TextSummarizer {
         JSONObject message = new JSONObject();
         try {
             message.put("role", "user");
-            message.put("content", "PARAPHRASE THIS");
+            message.put("content", "PARAPHRASE THIS" );
             messages.put(message);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -53,7 +53,7 @@ public class TextSummarizer {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization", "Bearer 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")
+                .header("Authorization", "Bearer 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")
                 .post(body)
                 .build();
 

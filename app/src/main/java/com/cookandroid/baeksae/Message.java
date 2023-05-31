@@ -2,17 +2,17 @@ package com.cookandroid.baeksae;
 
 public class Message {
     public static String SENT_BY_ME = "me";
-    public static String SENT_BY_BOT="bot";
+    public static String SENT_BY_BOT = "bot";
 
-    String message;
-    String sentBy;
+    private String content;
+    private String sentBy;
 
-    public String getMessage() {
-        return message;
+    public String getContent() {
+        return content;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getSentBy() {
@@ -23,8 +23,8 @@ public class Message {
         this.sentBy = sentBy;
     }
 
-    public Message(String message, String sentBy) {
-        this.message = message;
+    public Message(String content, String sentBy) {
+        this.content = content;
         this.sentBy = sentBy;
     }
 }

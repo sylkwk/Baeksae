@@ -45,6 +45,15 @@ public class ChatbotActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatbot);
+
+        ImageButton backButton = findViewById(R.id.button_back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         messageList = new ArrayList<>();
 
         recyclerView = findViewById(R.id.recycler_view);
@@ -66,36 +75,69 @@ public class ChatbotActivity extends AppCompatActivity {
             callAPI(question);
             welcomeTextView.setVisibility(View.GONE);
         });
+
+        // 이전 대화 로드
+        loadPreviousChat();
     }
 
     void addToChat(String message, String sentBy) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                messageList.add(new Message(message, sentBy));
+                if (!messageList.isEmpty() && messageList.get(messageList.size() - 1).getSentBy().equals(sentBy)) {
+                    // 이전 대화 내용과 같은 송신자에게서의 메시지인 경우
+                    Message lastMessage = messageList.get(messageList.size() - 1);
+                    lastMessage.setContent(lastMessage.getContent() + "\n" + message);
+                    messageAdapter.notifyItemChanged(messageList.size() - 1);
+                } else {
+                    // 새로운 송신자에게서의 메시지인 경우
+                    messageList.add(new Message(message, sentBy));
+                    messageAdapter.notifyItemInserted(messageList.size() - 1);
+                    recyclerView.smoothScrollToPosition(messageAdapter.getItemCount());
+                }
+            }
+        });
+    }
+
+    void addResponse(String response) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (!messageList.isEmpty()) {
+                    messageList.remove(messageList.size() - 1);
+                }
+                messageList.add(new Message(response, Message.SENT_BY_BOT));
                 messageAdapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(messageAdapter.getItemCount());
             }
         });
     }
 
-    void addResponse(String response) {
-        messageList.remove(messageList.size() - 1);
-        addToChat(response, Message.SENT_BY_BOT);
+    void loadPreviousChat() {
+        // 이전 대화 내용을 로드하는 로직
+        // 파일이나 데이터베이스에서 이전 대화 내용을 읽어와서 `messageList`에 추가
+        // 추가된 메시지들은 `messageAdapter.notifyDataSetChanged()`를 호출하여 RecyclerView에 표시
+        // 예시로 이전 대화를 두 개의 메시지로 가정하고 추가하는 코드
+/*        addToChat("안녕하세요!", Message.SENT_BY_BOT);
+        addToChat("반갑습니다.", Message.SENT_BY_ME);*/
     }
 
     void callAPI(String question) {
         // okhttp
-        messageList.add(new Message("입력중", Message.SENT_BY_BOT));
+        messageList.add(new Message("입력중...", Message.SENT_BY_BOT));
 
         JSONArray messages = new JSONArray();
-        JSONObject message = new JSONObject();
-        try {
-            message.put("role", "user");
-            message.put("content", question);
-            messages.put(message);
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+        // 모든 메시지 히스토리를 추가
+        for (Message message : messageList) {
+            JSONObject msg = new JSONObject();
+            try {
+                msg.put("role", message.getSentBy().equals(Message.SENT_BY_ME) ? "user" : "assistant");
+                msg.put("content", message.getContent());
+                messages.put(msg);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         JSONObject jsonBody = new JSONObject();
@@ -108,7 +150,7 @@ public class ChatbotActivity extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization", "Bearer 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")
+                .header("Authorization", "Bearer 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")
                 .post(body)
                 .build();
 
@@ -141,4 +183,5 @@ public class ChatbotActivity extends AppCompatActivity {
             }
         });
     }
+
 }
