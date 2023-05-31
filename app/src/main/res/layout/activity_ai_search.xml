@@ -50,20 +50,6 @@
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textView_result"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/rounded_corner"
-                android:hint="마이크를 눌러 말하세요..."
-                android:padding="10dp"
-                android:text=""
-                android:textAlignment="viewStart"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="20dp"
-                android:textStyle="bold" />
         </LinearLayout>
 
     </ScrollView>
