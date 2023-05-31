@@ -19,3 +19,6 @@ AI search tool for senior digital divide
 테르겔 : 진행상황 확안 후 회의록 작성
 
 이찬희 : 진행상황 확인 후 발표자료 작성
+
+ 
+6/1 : ChatBot 기능 개선 - 메시지 전송할때마다 초기화 -> 메시지 계속 이어짐
