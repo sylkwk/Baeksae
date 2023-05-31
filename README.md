@@ -5,7 +5,7 @@ AI search tool for senior digital divide
  
  -OpenAI API 연결
   
- -OpenAI API 사용해서 TextSumerizer 만들기
+ -OpenAI API 사용해서 TextSummarizer 만들기
   
  -STT 기능 구현
   
