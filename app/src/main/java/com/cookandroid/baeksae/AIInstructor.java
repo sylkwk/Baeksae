@@ -1,16 +1,15 @@
 package com.cookandroid.baeksae;
 
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +28,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class EasyDoctorActivity extends AppCompatActivity {
+public class AIInstructor extends AppCompatActivity {
 
     RecyclerView recyclerView;
     TextView welcomeTextView;
@@ -41,7 +40,7 @@ public class EasyDoctorActivity extends AppCompatActivity {
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
 
-    loading progress = new loading(EasyDoctorActivity.this);
+    loading progress = new loading(AIInstructor.this);
 
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -69,7 +68,7 @@ public class EasyDoctorActivity extends AppCompatActivity {
         messageEditText = findViewById(R.id.message_edit_text);
         sendButton = findViewById(R.id.send_btn);
 
-        welcomeTextView.setText("자세한 증상과 나이, 병력 등을 같이 적어주면 더욱 자세한 답변이 가능합니다.");
+        welcomeTextView.setText("원하는 주제나 배경에 대한 간단한 소설을 작성해 드릴수 있어요!");
 
 
         //setup recycler view
@@ -130,9 +129,11 @@ public class EasyDoctorActivity extends AppCompatActivity {
         JSONObject firstMessage = new JSONObject();
         try {
             firstMessage.put("role", "system");
-            firstMessage.put("content", "저는 당신이 의사로서 질병이나 질병에 대한 창의적인 치료법을 생각해내기를 바랍니다. " +
-                    "당신은 전통적인 약, 약초 요법, 그리고 다른 자연적인 대안들을 추천할 수 있어야 합니다. 또한 권장 사항을 제공할 때 환자의 나이, " +
-                    "생활 방식 및 병력을 고려해야 합니다.");
+            firstMessage.put("content", "저는 당신이 이야기꾼 역할을 해주길 바랍니다. 여러분은 관객들을 매료시키고, 상상력이 풍부하며, " +
+                    "매혹적인 재미있는 이야기들을 생각해 낼 것입니다. 그것은 사람들의 관심과 상상력을 사로잡을 수 있는 동화, " +
+                    "교육적인 이야기 또는 다른 종류의 이야기일 수 있습니다. 대상 독자에 따라 스토리텔링 세션의 특정 주제 또는 주제를 선택할 수 있습니다. " +
+                    "예를 들어, 어린이일 경우 동물에 대해 이야기할 수 있습니다. " +
+                    "어른일 경우 역사를 기반으로 한 이야기가 더 흥미를 끌 수 있습니다.");
             messages.put(firstMessage);
         } catch (JSONException e) {
             e.printStackTrace();

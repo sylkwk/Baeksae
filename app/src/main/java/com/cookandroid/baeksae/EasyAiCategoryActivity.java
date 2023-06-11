@@ -25,14 +25,41 @@ public class EasyAiCategoryActivity extends AppCompatActivity {
         //뒤로가기 (EasyAiCategoryActivity->MainActivity)
 
         CardView cardView1 = findViewById(R.id.button_toEasyDoctorActivity);
+        CardView cardView2 = findViewById(R.id.button_TravelPlanner);
+        CardView cardView3 = findViewById(R.id.button_AIInstructor);
+        CardView cardView4 = findViewById(R.id.button_toeasychef);
         cardView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // NewCategoryAcivity로 이동
                 Intent intent = new Intent(EasyAiCategoryActivity.this, EasyDoctorActivity.class);
                 startActivity(intent);
             }
         });
+        cardView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EasyAiCategoryActivity.this, TravelPlannerActivity.class);
+                startActivity(intent);
+            }
+        });
+        cardView3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // NewCategoryAcivity로 이동
+                Intent intent = new Intent(EasyAiCategoryActivity.this, AIInstructor.class);
+                startActivity(intent);
+            }
+        });
+        cardView4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // NewCategoryAcivity로 이동
+                Intent intent = new Intent(EasyAiCategoryActivity.this, EasychefActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 
     }
 }

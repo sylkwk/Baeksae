@@ -1,35 +1,35 @@
 package com.cookandroid.baeksae;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+        import androidx.annotation.NonNull;
+        import androidx.appcompat.app.AppCompatActivity;
+        import androidx.recyclerview.widget.LinearLayoutManager;
+        import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.TextView;
+        import android.os.Bundle;
+        import android.view.View;
+        import android.widget.EditText;
+        import android.widget.FrameLayout;
+        import android.widget.ImageButton;
+        import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+        import org.json.JSONArray;
+        import org.json.JSONException;
+        import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+        import java.io.IOException;
+        import java.util.ArrayList;
+        import java.util.List;
+        import java.util.concurrent.TimeUnit;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+        import okhttp3.Call;
+        import okhttp3.Callback;
+        import okhttp3.MediaType;
+        import okhttp3.OkHttpClient;
+        import okhttp3.Request;
+        import okhttp3.RequestBody;
+        import okhttp3.Response;
 
-public class EasyDoctorActivity extends AppCompatActivity {
+public class EasychefActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     TextView welcomeTextView;
@@ -41,7 +41,7 @@ public class EasyDoctorActivity extends AppCompatActivity {
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
 
-    loading progress = new loading(EasyDoctorActivity.this);
+    loading progress = new loading(EasychefActivity.this);
 
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -69,7 +69,7 @@ public class EasyDoctorActivity extends AppCompatActivity {
         messageEditText = findViewById(R.id.message_edit_text);
         sendButton = findViewById(R.id.send_btn);
 
-        welcomeTextView.setText("자세한 증상과 나이, 병력 등을 같이 적어주면 더욱 자세한 답변이 가능합니다.");
+        welcomeTextView.setText("원하는 메뉴나 재료를 입력해주세요!");
 
 
         //setup recycler view
@@ -130,9 +130,8 @@ public class EasyDoctorActivity extends AppCompatActivity {
         JSONObject firstMessage = new JSONObject();
         try {
             firstMessage.put("role", "system");
-            firstMessage.put("content", "저는 당신이 의사로서 질병이나 질병에 대한 창의적인 치료법을 생각해내기를 바랍니다. " +
-                    "당신은 전통적인 약, 약초 요법, 그리고 다른 자연적인 대안들을 추천할 수 있어야 합니다. 또한 권장 사항을 제공할 때 환자의 나이, " +
-                    "생활 방식 및 병력을 고려해야 합니다.");
+            firstMessage.put("content", "저는 영양학적으로 유익하지만 시간이 많이 소비되지 않는 음식을 포함한 맛있는 요리법을 제안할 수 있는 사람이 필요합니다. " +
+                    "따라서 비용 효율성과 같은 다른 요소들 중에서 바쁜 사람들에게 적합하기 때문에 전체적인 요리는 건강하면서도 경제적입니다!");
             messages.put(firstMessage);
         } catch (JSONException e) {
             e.printStackTrace();

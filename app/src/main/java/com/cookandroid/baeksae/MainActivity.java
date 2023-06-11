@@ -9,7 +9,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import java.util.concurrent.TimeUnit;
+import okhttp3.OkHttpClient;
+
 public class MainActivity extends AppCompatActivity {
+
+    OkHttpClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // NewCategoryAcivity로 이동
-                Intent intent = new Intent(MainActivity.this, NewsCategoryActivity.class);
+                Intent intent = new Intent(MainActivity.this, NewsPageActivity.class);
                 startActivity(intent);
             }
         });
@@ -65,5 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
 }
