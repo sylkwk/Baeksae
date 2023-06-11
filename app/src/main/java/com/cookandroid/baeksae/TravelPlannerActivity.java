@@ -29,7 +29,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class EasyDoctorActivity extends AppCompatActivity {
+public class TravelPlannerActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     TextView welcomeTextView;
@@ -41,7 +41,7 @@ public class EasyDoctorActivity extends AppCompatActivity {
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
 
-    loading progress = new loading(EasyDoctorActivity.this);
+    loading progress = new loading(TravelPlannerActivity.this);
 
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -69,8 +69,8 @@ public class EasyDoctorActivity extends AppCompatActivity {
         messageEditText = findViewById(R.id.message_edit_text);
         sendButton = findViewById(R.id.send_btn);
 
-        welcomeTextView.setText("자세한 증상과 나이, 병력 등을 같이 적어주면 더욱 자세한 답변이 가능합니다.");
 
+        welcomeTextView.setText("현재 여행위치나 여행하고자 하는 곳을 입력해주세요.");
 
         //setup recycler view
         messageAdapter = new MessageAdapter(messageList);
@@ -130,9 +130,10 @@ public class EasyDoctorActivity extends AppCompatActivity {
         JSONObject firstMessage = new JSONObject();
         try {
             firstMessage.put("role", "system");
-            firstMessage.put("content", "저는 당신이 의사로서 질병이나 질병에 대한 창의적인 치료법을 생각해내기를 바랍니다. " +
-                    "당신은 전통적인 약, 약초 요법, 그리고 다른 자연적인 대안들을 추천할 수 있어야 합니다. 또한 권장 사항을 제공할 때 환자의 나이, " +
-                    "생활 방식 및 병력을 고려해야 합니다.");
+            firstMessage.put("content", "저는 당신이 여행 가이드 역할을 해주길 바랍니다. 제가 당신에게 제 위치를 알려드릴 테니 " +
+                    "당신은 제 위치 근처에 방문할 곳을 추천해주실 것입니다. " +
+                    "경우에 따라서는 제가 방문할 장소의 종류도 알려드리겠습니다. " +
+                    "당신은 또한 나의 첫 번째 장소와 가까운 비슷한 종류의 장소들을 나에게 제안할 것입니다.");
             messages.put(firstMessage);
         } catch (JSONException e) {
             e.printStackTrace();
