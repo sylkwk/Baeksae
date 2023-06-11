@@ -12,7 +12,7 @@ AI search tool for senior digital divide
 
 <역할 분담>
   
-진후 : OpenAI API 연동, STT 기능
+진후 : OpenAI API 연동, 뉴스 요약기능, ai 카테고리별 특화된 대화 제공
   
 시열 : news viewpager 구현, 긴편AI 기능 구성 (UI), TTS기능 보완,  TextSummerizer 만들기
   
