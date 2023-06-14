@@ -1,53 +1,66 @@
 package com.cookandroid.baeksae;
 
-        import androidx.annotation.NonNull;
-        import androidx.appcompat.app.AppCompatActivity;
-        import androidx.recyclerview.widget.LinearLayoutManager;
-        import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-        import android.os.Bundle;
-        import android.view.View;
-        import android.widget.EditText;
-        import android.widget.FrameLayout;
-        import android.widget.ImageButton;
-        import android.widget.TextView;
+import android.Manifest;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import org.json.JSONArray;
-        import org.json.JSONException;
-        import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-        import java.io.IOException;
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.concurrent.TimeUnit;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
-        import okhttp3.Call;
-        import okhttp3.Callback;
-        import okhttp3.MediaType;
-        import okhttp3.OkHttpClient;
-        import okhttp3.Request;
-        import okhttp3.RequestBody;
-        import okhttp3.Response;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
-public class EasychefActivity extends AppCompatActivity {
+public class EasyChefActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     TextView welcomeTextView;
     EditText messageEditText;
     ImageButton sendButton;
+    ImageButton sttButton;
     List<Message> messageList;
     MessageAdapter messageAdapter;
 
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
 
-    loading progress = new loading(EasychefActivity.this);
+    loading progress = new loading(EasyChefActivity.this);
 
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(120, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .build();
+
+    SpeechToTextHelper speechToTextHelper;
+
+    private static final int REQUEST_CODE_SPEECH_INPUT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +81,11 @@ public class EasychefActivity extends AppCompatActivity {
         welcomeTextView = findViewById(R.id.welcome_text);
         messageEditText = findViewById(R.id.message_edit_text);
         sendButton = findViewById(R.id.send_btn);
+        sttButton = findViewById(R.id.button_stt);
 
         welcomeTextView.setText("원하는 메뉴나 재료를 입력해주세요!");
 
-
-        //setup recycler view
+        // 채팅 목록을 표시하는 RecyclerView 설정
         messageAdapter = new MessageAdapter(messageList);
         recyclerView.setAdapter(messageAdapter);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -88,8 +101,46 @@ public class EasychefActivity extends AppCompatActivity {
             callAPI(question);
         });
 
+        // 음성 인식을 위한 SpeechToTextHelper 초기화
+        speechToTextHelper = new SpeechToTextHelper(this, messageEditText);
+        speechToTextHelper.initializeViews(sttButton);
+
+        sttButton.setOnClickListener((v) -> {
+            startSpeechToText();
+        });
     }
 
+    // 음성 입력 시작
+    private void startSpeechToText() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "음성을 말해주세요...");
+        try {
+            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "음성 인식이 지원되지 않습니다.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 음성 입력 결과 처리
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT) {
+            if (resultCode == RESULT_OK && data != null) {
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String spokenText = result.get(0);
+                addToChat(spokenText, Message.SENT_BY_ME);
+                messageEditText.setText("");
+                welcomeTextView.setVisibility(View.GONE);
+                progress.showDialog();
+                callAPI(spokenText);
+            }
+        }
+    }
+
+    // 메시지를 채팅 목록에 추가하는 메서드
     void addToChat(String message, String sentBy) {
         runOnUiThread(new Runnable() {
             @Override
@@ -109,6 +160,7 @@ public class EasychefActivity extends AppCompatActivity {
         });
     }
 
+    // 응답 메시지를 채팅 목록에 추가하는 메서드
     void addResponse(String response) {
         runOnUiThread(new Runnable() {
             @Override
@@ -119,13 +171,13 @@ public class EasychefActivity extends AppCompatActivity {
                 messageList.add(new Message(response, Message.SENT_BY_BOT));
                 messageAdapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(messageAdapter.getItemCount());
+                progress.closeDialog();
             }
         });
-        progress.closeDialog();
     }
 
+    // OpenAI API를 호출하여 대화를 처리하는 메서드
     void callAPI(String question) {
-
         JSONArray messages = new JSONArray();
         JSONObject firstMessage = new JSONObject();
         try {
@@ -137,7 +189,6 @@ public class EasychefActivity extends AppCompatActivity {
             e.printStackTrace();
             progress.closeDialog();
         }
-
 
         // 모든 메시지 히스토리를 추가
         for (Message message : messageList) {
@@ -163,14 +214,14 @@ public class EasychefActivity extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization","Bearer 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")
+                .header("Authorization", "Bearer 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")
                 .post(body)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                addResponse("Failed to load response due to " + e.getMessage());
+                addResponse("응답을 가져오지 못했습니다: " + e.getMessage());
                 progress.closeDialog();
             }
 
@@ -190,7 +241,7 @@ public class EasychefActivity extends AppCompatActivity {
                 } else {
                     try {
                         String responseBody = response.body().string();
-                        addResponse("Failed to load response due to " + responseBody);
+                        addResponse("응답을 가져오지 못했습니다: " + responseBody);
                         progress.closeDialog();
                     } catch (IOException e) {
                         e.printStackTrace();

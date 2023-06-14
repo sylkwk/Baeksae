@@ -25,9 +25,9 @@ public class EasyAiCategoryActivity extends AppCompatActivity {
         //뒤로가기 (EasyAiCategoryActivity->MainActivity)
 
         CardView cardView1 = findViewById(R.id.button_toEasyDoctorActivity);
-        CardView cardView2 = findViewById(R.id.button_TravelPlanner);
+        CardView cardView2 = findViewById(R.id.button_toEastTripActivity);
         CardView cardView3 = findViewById(R.id.button_AIInstructor);
-        CardView cardView4 = findViewById(R.id.button_toeasychef);
+        CardView cardView4 = findViewById(R.id.button_toEasyChefActivity);
         cardView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,7 +45,7 @@ public class EasyAiCategoryActivity extends AppCompatActivity {
         cardView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // NewCategoryAcivity로 이동
+                // EasyDoctorActivity로 이동
                 Intent intent = new Intent(EasyAiCategoryActivity.this, AIInstructor.class);
                 startActivity(intent);
             }
@@ -54,10 +54,22 @@ public class EasyAiCategoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // NewCategoryAcivity로 이동
-                Intent intent = new Intent(EasyAiCategoryActivity.this, EasychefActivity.class);
+                Intent intent = new Intent(EasyAiCategoryActivity.this, EasyChefActivity.class);
                 startActivity(intent);
             }
         });
+
+/*
+        CardView cardView2 = findViewById(R.id.button_toEastTripActivity);
+        cardView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // EastTripActivity로 이동
+                Intent intent = new Intent(EasyAiCategoryActivity.this, EasyTripActivity.class);
+                startActivity(intent);
+            }
+        });
+*/
 
 
 

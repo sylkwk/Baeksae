@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class SpeechToTextHelper {
-    private static final int REQUEST_CODE_SPEECH_INPUT = 100;
+    public static final int REQUEST_CODE_SPEECH_INPUT =100;
     private TextView textViewResponse;
     private ImageButton buttonSTT;
     private AppCompatActivity activity;

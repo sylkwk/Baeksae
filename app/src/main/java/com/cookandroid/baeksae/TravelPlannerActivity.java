@@ -5,10 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -35,11 +37,11 @@ public class TravelPlannerActivity extends AppCompatActivity {
     TextView welcomeTextView;
     EditText messageEditText;
     ImageButton sendButton;
+    ImageButton sttButton;
     List<Message> messageList;
     MessageAdapter messageAdapter;
 
-    public static final MediaType JSON
-            = MediaType.get("application/json; charset=utf-8");
+    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     loading progress = new loading(TravelPlannerActivity.this);
 
@@ -48,6 +50,8 @@ public class TravelPlannerActivity extends AppCompatActivity {
             .writeTimeout(120, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .build();
+
+    private SpeechToTextHelper speechToTextHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +72,11 @@ public class TravelPlannerActivity extends AppCompatActivity {
         welcomeTextView = findViewById(R.id.welcome_text);
         messageEditText = findViewById(R.id.message_edit_text);
         sendButton = findViewById(R.id.send_btn);
-
+        sttButton = findViewById(R.id.button_stt);
 
         welcomeTextView.setText("현재 여행위치나 여행하고자 하는 곳을 입력해주세요.");
 
-        //setup recycler view
+        // Setup recycler view
         messageAdapter = new MessageAdapter(messageList);
         recyclerView.setAdapter(messageAdapter);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -88,6 +92,9 @@ public class TravelPlannerActivity extends AppCompatActivity {
             callAPI(question);
         });
 
+        // Initialize SpeechToTextHelper
+        speechToTextHelper = new SpeechToTextHelper(this, messageEditText);
+        speechToTextHelper.initializeViews(sttButton);
     }
 
     void addToChat(String message, String sentBy) {
@@ -119,13 +126,12 @@ public class TravelPlannerActivity extends AppCompatActivity {
                 messageList.add(new Message(response, Message.SENT_BY_BOT));
                 messageAdapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(messageAdapter.getItemCount());
+                progress.closeDialog();
             }
         });
-        progress.closeDialog();
     }
 
     void callAPI(String question) {
-
         JSONArray messages = new JSONArray();
         JSONObject firstMessage = new JSONObject();
         try {
@@ -139,7 +145,6 @@ public class TravelPlannerActivity extends AppCompatActivity {
             e.printStackTrace();
             progress.closeDialog();
         }
-
 
         // 모든 메시지 히스토리를 추가
         for (Message message : messageList) {
@@ -165,7 +170,7 @@ public class TravelPlannerActivity extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization","Bearer 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")
+                .header("Authorization","Bearer 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")
                 .post(body)
                 .build();
 
@@ -201,5 +206,20 @@ public class TravelPlannerActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Call SpeechToTextHelper's onActivityResult
+        speechToTextHelper.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SpeechToTextHelper.REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK && data != null) {
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String spokenText = result.get(0);
+            addToChat(spokenText, Message.SENT_BY_ME);
+            callAPI(spokenText);
+            welcomeTextView.setVisibility(View.GONE);
+        }
     }
 }

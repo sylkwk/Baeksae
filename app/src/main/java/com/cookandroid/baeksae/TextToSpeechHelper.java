@@ -7,6 +7,7 @@ import android.util.Log;
 import java.util.Locale;
 
 public class TextToSpeechHelper {
+    public static final int REQUEST_CODE_SPEECH_INPUT = 100;
     private TextToSpeech mTTS;
     private boolean mIsSpeaking;
 

@@ -1,6 +1,8 @@
 package com.cookandroid.baeksae;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -34,6 +36,7 @@ public class AIInstructor extends AppCompatActivity {
     TextView welcomeTextView;
     EditText messageEditText;
     ImageButton sendButton;
+    ImageButton sttButton;
     List<Message> messageList;
     MessageAdapter messageAdapter;
 
@@ -47,6 +50,8 @@ public class AIInstructor extends AppCompatActivity {
             .writeTimeout(120, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .build();
+
+    private SpeechToTextHelper speechToTextHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +72,11 @@ public class AIInstructor extends AppCompatActivity {
         welcomeTextView = findViewById(R.id.welcome_text);
         messageEditText = findViewById(R.id.message_edit_text);
         sendButton = findViewById(R.id.send_btn);
+        sttButton = findViewById(R.id.button_stt);
 
-        welcomeTextView.setText("원하는 주제나 배경에 대한 간단한 소설을 작성해 드릴수 있어요!");
+        welcomeTextView.setText("원하는 주제나 배경에 대한 간단한 소설을 작성해 드릴 수 있어요!");
 
-
-        //setup recycler view
+        // Setup recycler view
         messageAdapter = new MessageAdapter(messageList);
         recyclerView.setAdapter(messageAdapter);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -87,6 +92,9 @@ public class AIInstructor extends AppCompatActivity {
             callAPI(question);
         });
 
+        // Initialize SpeechToTextHelper
+        speechToTextHelper = new SpeechToTextHelper(this, messageEditText);
+        speechToTextHelper.initializeViews(sttButton);
     }
 
     void addToChat(String message, String sentBy) {
@@ -118,9 +126,9 @@ public class AIInstructor extends AppCompatActivity {
                 messageList.add(new Message(response, Message.SENT_BY_BOT));
                 messageAdapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(messageAdapter.getItemCount());
+                progress.closeDialog();
             }
         });
-        progress.closeDialog();
     }
 
     void callAPI(String question) {
@@ -139,7 +147,6 @@ public class AIInstructor extends AppCompatActivity {
             e.printStackTrace();
             progress.closeDialog();
         }
-
 
         // 모든 메시지 히스토리를 추가
         for (Message message : messageList) {
@@ -165,7 +172,7 @@ public class AIInstructor extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization","Bearer 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")
+                .header("Authorization", "Bearer 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")
                 .post(body)
                 .build();
 
@@ -201,5 +208,20 @@ public class AIInstructor extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Call SpeechToTextHelper's onActivityResult
+        speechToTextHelper.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SpeechToTextHelper.REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK && data != null) {
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String spokenText = result.get(0);
+            addToChat(spokenText, Message.SENT_BY_ME);
+            callAPI(spokenText);
+            welcomeTextView.setVisibility(View.GONE);
+        }
     }
 }

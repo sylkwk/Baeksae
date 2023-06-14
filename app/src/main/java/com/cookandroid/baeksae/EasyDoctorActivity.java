@@ -2,15 +2,22 @@ package com.cookandroid.baeksae;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +26,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -35,6 +43,7 @@ public class EasyDoctorActivity extends AppCompatActivity {
     TextView welcomeTextView;
     EditText messageEditText;
     ImageButton sendButton;
+    ImageButton sttButton;
     List<Message> messageList;
     MessageAdapter messageAdapter;
 
@@ -48,6 +57,8 @@ public class EasyDoctorActivity extends AppCompatActivity {
             .writeTimeout(120, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .build();
+
+    private SpeechToTextHelper speechToTextHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +79,11 @@ public class EasyDoctorActivity extends AppCompatActivity {
         welcomeTextView = findViewById(R.id.welcome_text);
         messageEditText = findViewById(R.id.message_edit_text);
         sendButton = findViewById(R.id.send_btn);
+        sttButton = findViewById(R.id.button_stt);
 
         welcomeTextView.setText("자세한 증상과 나이, 병력 등을 같이 적어주면 더욱 자세한 답변이 가능합니다.");
 
-
-        //setup recycler view
+        // Setup recycler view
         messageAdapter = new MessageAdapter(messageList);
         recyclerView.setAdapter(messageAdapter);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -88,6 +99,9 @@ public class EasyDoctorActivity extends AppCompatActivity {
             callAPI(question);
         });
 
+        // Initialize SpeechToTextHelper
+        speechToTextHelper = new SpeechToTextHelper(this, messageEditText);
+        speechToTextHelper.initializeViews(sttButton);
     }
 
     void addToChat(String message, String sentBy) {
@@ -119,9 +133,9 @@ public class EasyDoctorActivity extends AppCompatActivity {
                 messageList.add(new Message(response, Message.SENT_BY_BOT));
                 messageAdapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(messageAdapter.getItemCount());
+                progress.closeDialog();
             }
         });
-        progress.closeDialog();
     }
 
     void callAPI(String question) {
@@ -138,7 +152,6 @@ public class EasyDoctorActivity extends AppCompatActivity {
             e.printStackTrace();
             progress.closeDialog();
         }
-
 
         // 모든 메시지 히스토리를 추가
         for (Message message : messageList) {
@@ -164,7 +177,7 @@ public class EasyDoctorActivity extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
-                .header("Authorization","Bearer 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")
+                .header("Authorization","Bearer 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")
                 .post(body)
                 .build();
 
@@ -200,5 +213,20 @@ public class EasyDoctorActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Call SpeechToTextHelper's onActivityResult
+        speechToTextHelper.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SpeechToTextHelper.REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK && data != null) {
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String spokenText = result.get(0);
+            addToChat(spokenText, Message.SENT_BY_ME);
+            callAPI(spokenText);
+            welcomeTextView.setVisibility(View.GONE);
+        }
     }
 }

@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.cookandroid.baeksae.ViewPager.NewsPageActivity;
-
 public class NewsCategoryActivity extends AppCompatActivity {
 
     @Override
@@ -60,7 +58,7 @@ public class NewsCategoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TestActivity로 이동
-                Intent intent = new Intent(NewsCategoryActivity.this, TestActivity.class);
+                Intent intent = new Intent(NewsCategoryActivity.this, NewsPageActivity.class);
                 startActivity(intent);
             }
         });
